@@ -1,0 +1,15 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "plugins": ["prettier"],
+  "extends": "eslint:recommended",
+  "rules": {
+    "prettier/prettier": "error",
+    "no-console": "off"
+  }
+}
