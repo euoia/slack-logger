@@ -1,14 +1,18 @@
 module.exports = {
   slackWebhookUrl: "https://hooks.slack.com/services/XXX1123/XXX1123/XXX1123",
+  defaults: {
+    logTimestamp: false,
+    logPath: false
+  },
   filesToWatch: [
     {
-      name: "error.log",
-      addTimestamp: false,
+      filepath: "error.log",
+      logTimestamp: true,
       prefix: "BOT"
     },
     {
-      name: "access.log",
-      addTimestamp: false,
+      filepath: "access.log",
+      logPath: true,
       prefix: "APACHE"
     }
   ]
