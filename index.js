@@ -1,7 +1,7 @@
 const conf = require("./.env.js");
 const Tail = require("tail-file");
 const { IncomingWebhook } = require("@slack/webhook");
-const debounce = require('debounce');
+const debounce = require("debounce");
 
 const slack = new IncomingWebhook(conf.slackWebhookUrl);
 
@@ -15,14 +15,14 @@ const getFileConfigValue = (file, key) => {
   return file[key];
 };
 
-const sendBufferToSlack = file => {
-  const message = buffers[file.filepath].join("\n");
+const sendBufferToSlack = () => {
+  const message = buffers[this.filepath].join("\n");
 
   slack.send({
     text: "```" + message + "```"
   });
 
-  buffers[file.filepath] = [];
+  buffers[this.filepath] = [];
   console.log(message);
 };
 
