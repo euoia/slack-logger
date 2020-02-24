@@ -22,6 +22,7 @@ const sendBufferToSlack = file => {
     text: "```" + message + "```"
   });
 
+  buffers[file.filepath] = [];
   console.log(message);
 };
 
