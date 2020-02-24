@@ -19,7 +19,7 @@ const sendBufferToSlack = file => {
   const message = buffers[file.filepath].join("\n");
 
   slack.send({
-    text: "```" + message + "```"
+    text: "```" + message
   });
 
   buffers[file.filepath] = [];
