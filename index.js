@@ -19,7 +19,7 @@ const sendBufferToSlack = file => {
   const message = buffers[file.filepath].join("\n");
 
   slack.send({
-    text: "`" + message + "`"
+    text: "```" + message + "```"
   });
 
   buffers[file.filepath] = [];
@@ -30,6 +30,7 @@ for (const file of conf.filesToWatch) {
   console.log(`Started watching for changes in ${file.filepath}.`);
 
   buffers[file.filepath] = [];
+  file.sendBufferToSlack = sendBufferToSlack.bind(file);
 
   new Tail(file.filepath, line => {
     if (buffers[file.filepath].length === 0) {
@@ -53,6 +54,6 @@ for (const file of conf.filesToWatch) {
     }
 
     buffers[file.filepath].push(line);
-    debounce(sendBufferToSlack.bind(this, file), 1000)();
+    debounce(file.sendBufferToSlack, 1000)();
   });
 }
