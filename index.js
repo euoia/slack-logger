@@ -37,7 +37,7 @@ function sendBufferToSlack() {
   console.log(`sendBufferToSlack`);
   const message = buffers[this.filepath].join("\n");
 
-  const text = getFileMetaData(this) + "\n" + "```" + message + "```";
+  const text = "`" + getFileMetaData(this) + "`\n" + "```" + message + "```";
   slack.send({
     text
   });
