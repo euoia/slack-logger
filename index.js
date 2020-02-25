@@ -15,12 +15,31 @@ const getFileConfigValue = (file, key) => {
   return file[key];
 };
 
+const getFileMetaData = file => {
+  const metaData = [];
+  // Only add metadata to the start of the buffer.
+  if (getFileConfigValue(file, "logPath")) {
+    metaData.push(file.filepath);
+  }
+
+  if (file.prefix) {
+    metaData.push(file.prefix);
+  }
+
+  if (getFileConfigValue(file, "logTimestamp")) {
+    metaData.push(new Date().toLocaleString());
+  }
+
+  return metaData.join(" ");
+};
+
 function sendBufferToSlack() {
   console.log(`sendBufferToSlack`);
   const message = buffers[this.filepath].join("\n");
 
+  const text = getFileMetaData(this) + "\n" + "```" + message + "```";
   slack.send({
-    text: "```" + message + "```"
+    text
   });
 
   buffers[this.filepath] = [];
@@ -34,26 +53,6 @@ for (const file of conf.filesToWatch) {
   file.sendBufferToSlack = debounce(sendBufferToSlack.bind(file), 1000);
 
   new Tail(file.filepath, line => {
-    if (buffers[file.filepath].length === 0) {
-      // Only add metadata to the start of the buffer.
-      if (getFileConfigValue(file, "logPath")) {
-        line = `<${file.filepath}> ${line}`;
-      }
-
-      const metaData = [];
-      if (file.prefix) {
-        metaData.push(file.prefix);
-      }
-
-      if (getFileConfigValue(file, "logTimestamp")) {
-        metaData.push(new Date().toLocaleString());
-      }
-
-      if (metaData.length) {
-        line = `[${metaData.join(" ")}] ${line}`;
-      }
-    }
-
     buffers[file.filepath].push(line);
     file.sendBufferToSlack();
   });
